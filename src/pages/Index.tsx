@@ -1,11 +1,11 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, Sparkles, Download, Copy, AlertTriangle } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
+import { Loader2, Sparkles, Download, Copy, AlertTriangle, Moon, Sun, Menu } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface GeneratedConcept {
@@ -17,6 +17,10 @@ interface GeneratedConcept {
 }
 
 const Index = () => {
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const saved = localStorage.getItem('genesis_dark_mode');
+    return saved ? JSON.parse(saved) : true;
+  });
   const [apiKey, setApiKey] = useState(() => localStorage.getItem('genesis_api_key') || '');
   const [conceptType, setConceptType] = useState('');
   const [seedIdea, setSeedIdea] = useState('');
@@ -34,6 +38,15 @@ const Index = () => {
     'Mystical Phenomenon',
     'Legendary Vehicle'
   ];
+
+  useEffect(() => {
+    localStorage.setItem('genesis_dark_mode', JSON.stringify(isDarkMode));
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDarkMode]);
 
   const saveApiKey = (key: string) => {
     localStorage.setItem('genesis_api_key', key);
@@ -245,33 +258,59 @@ ${generatedConcept.loreSnippet}`;
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-purple-900 to-slate-900 text-white">
+    <div className={`min-h-screen transition-all duration-500 ${isDarkMode ? 'bg-gradient-to-br from-indigo-950 via-purple-900 to-slate-900 text-white' : 'bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 text-gray-900'}`}>
       {/* Animated background elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className={`absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl animate-pulse transition-all duration-1000 ${isDarkMode ? 'bg-purple-500/10' : 'bg-purple-300/20'}`}></div>
+        <div className={`absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-3xl animate-pulse delay-1000 transition-all duration-1000 ${isDarkMode ? 'bg-indigo-500/10' : 'bg-indigo-300/20'}`}></div>
+        <div className={`absolute top-1/2 left-1/2 w-72 h-72 rounded-full blur-2xl animate-pulse delay-500 transition-all duration-1000 ${isDarkMode ? 'bg-yellow-500/5' : 'bg-yellow-300/15'}`}></div>
       </div>
+
+      {/* Navbar */}
+      <nav className={`relative z-50 border-b transition-all duration-300 ${isDarkMode ? 'bg-slate-900/80 backdrop-blur-md border-purple-500/20' : 'bg-white/80 backdrop-blur-md border-purple-200/40'}`}>
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3 animate-fade-in">
+              <Sparkles className={`w-6 h-6 transition-colors duration-300 ${isDarkMode ? 'text-yellow-400' : 'text-purple-600'}`} />
+              <h1 className={`text-xl font-bold bg-gradient-to-r bg-clip-text text-transparent transition-all duration-300 ${isDarkMode ? 'from-yellow-400 via-purple-300 to-blue-300' : 'from-purple-600 via-blue-600 to-indigo-600'}`}>
+                AI Genesis Engine
+              </h1>
+            </div>
+            
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 animate-fade-in">
+                <Sun className={`w-4 h-4 transition-colors duration-300 ${isDarkMode ? 'text-gray-400' : 'text-yellow-500'}`} />
+                <Switch 
+                  checked={isDarkMode} 
+                  onCheckedChange={setIsDarkMode}
+                  className="data-[state=checked]:bg-purple-600"
+                />
+                <Moon className={`w-4 h-4 transition-colors duration-300 ${isDarkMode ? 'text-blue-400' : 'text-gray-400'}`} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
 
       <div className="relative z-10 container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-12 animate-fade-in">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <Sparkles className="w-8 h-8 text-yellow-400" />
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-yellow-400 via-purple-300 to-blue-300 bg-clip-text text-transparent">
-              AI Genesis Engine
-            </h1>
-            <Sparkles className="w-8 h-8 text-yellow-400" />
+            <Sparkles className={`w-8 h-8 animate-pulse transition-colors duration-300 ${isDarkMode ? 'text-yellow-400' : 'text-purple-600'}`} />
+            <h2 className={`text-4xl md:text-5xl font-bold bg-gradient-to-r bg-clip-text text-transparent transition-all duration-300 ${isDarkMode ? 'from-yellow-400 via-purple-300 to-blue-300' : 'from-purple-600 via-blue-600 to-indigo-600'}`}>
+              Forge New Worlds
+            </h2>
+            <Sparkles className={`w-8 h-8 animate-pulse delay-300 transition-colors duration-300 ${isDarkMode ? 'text-yellow-400' : 'text-purple-600'}`} />
           </div>
-          <p className="text-xl text-purple-200 max-w-2xl mx-auto">
-            Forge new worlds, beings, and artifacts from the essence of imagination. 
-            Enter your vision and watch as the Genesis Engine breathes life into your concepts.
+          <p className={`text-lg md:text-xl max-w-2xl mx-auto transition-colors duration-300 ${isDarkMode ? 'text-purple-200' : 'text-gray-700'}`}>
+            Enter your vision and watch as the Genesis Engine breathes life into your concepts with AI-powered creativity.
           </p>
         </div>
 
         {/* API Key Input */}
-        <Card className="mb-8 bg-slate-800/50 border-purple-500/30 backdrop-blur-sm">
+        <Card className={`mb-8 transition-all duration-500 hover:scale-105 animate-fade-in ${isDarkMode ? 'bg-slate-800/50 border-purple-500/30 backdrop-blur-sm' : 'bg-white/70 border-purple-200/50 backdrop-blur-sm'}`}>
           <CardHeader>
-            <CardTitle className="text-yellow-400 flex items-center gap-2">
+            <CardTitle className={`flex items-center gap-2 transition-colors duration-300 ${isDarkMode ? 'text-yellow-400' : 'text-purple-700'}`}>
               <AlertTriangle className="w-5 h-5" />
               Genesis Key Required
             </CardTitle>
@@ -283,9 +322,9 @@ ${generatedConcept.loreSnippet}`;
                 placeholder="Enter your Google API Key to unlock the Genesis Engine..."
                 value={apiKey}
                 onChange={(e) => saveApiKey(e.target.value)}
-                className="bg-slate-700/50 border-purple-400/30 text-white placeholder-gray-400"
+                className={`transition-all duration-300 ${isDarkMode ? 'bg-slate-700/50 border-purple-400/30 text-white placeholder-gray-400' : 'bg-white/80 border-purple-300/40 text-gray-900 placeholder-gray-500'}`}
               />
-              <p className="text-sm text-gray-400">
+              <p className={`text-sm transition-colors duration-300 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                 Your API key is stored locally and never shared. Required for both text and image generation.
               </p>
             </div>
@@ -293,22 +332,22 @@ ${generatedConcept.loreSnippet}`;
         </Card>
 
         {/* Input Section */}
-        <Card className="mb-8 bg-slate-800/50 border-purple-500/30 backdrop-blur-sm">
+        <Card className={`mb-8 transition-all duration-500 hover:scale-105 animate-fade-in ${isDarkMode ? 'bg-slate-800/50 border-purple-500/30 backdrop-blur-sm' : 'bg-white/70 border-purple-200/50 backdrop-blur-sm'}`}>
           <CardHeader>
-            <CardTitle className="text-purple-300">Genesis Parameters</CardTitle>
+            <CardTitle className={`transition-colors duration-300 ${isDarkMode ? 'text-purple-300' : 'text-purple-700'}`}>Genesis Parameters</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-purple-200 mb-2">
+            <div className="transform transition-all duration-300 hover:scale-105">
+              <label className={`block text-sm font-medium mb-2 transition-colors duration-300 ${isDarkMode ? 'text-purple-200' : 'text-purple-700'}`}>
                 Concept Type
               </label>
               <Select value={conceptType} onValueChange={setConceptType}>
-                <SelectTrigger className="bg-slate-700/50 border-purple-400/30 text-white">
+                <SelectTrigger className={`transition-all duration-300 ${isDarkMode ? 'bg-slate-700/50 border-purple-400/30 text-white' : 'bg-white/80 border-purple-300/40 text-gray-900'}`}>
                   <SelectValue placeholder="Choose what you wish to create..." />
                 </SelectTrigger>
-                <SelectContent className="bg-slate-800 border-purple-500/30">
+                <SelectContent className={`${isDarkMode ? 'bg-slate-800 border-purple-500/30' : 'bg-white border-purple-200/50'}`}>
                   {conceptTypes.map((type) => (
-                    <SelectItem key={type} value={type} className="text-white hover:bg-purple-600/20">
+                    <SelectItem key={type} value={type} className={`transition-colors duration-200 ${isDarkMode ? 'text-white hover:bg-purple-600/20' : 'text-gray-900 hover:bg-purple-100'}`}>
                       {type}
                     </SelectItem>
                   ))}
@@ -316,8 +355,8 @@ ${generatedConcept.loreSnippet}`;
               </Select>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-purple-200 mb-2">
+            <div className="transform transition-all duration-300 hover:scale-105">
+              <label className={`block text-sm font-medium mb-2 transition-colors duration-300 ${isDarkMode ? 'text-purple-200' : 'text-purple-700'}`}>
                 Seed Idea / Keywords
               </label>
               <Textarea
@@ -325,25 +364,25 @@ ${generatedConcept.loreSnippet}`;
                 value={seedIdea}
                 onChange={(e) => setSeedIdea(e.target.value)}
                 rows={4}
-                className="bg-slate-700/50 border-purple-400/30 text-white placeholder-gray-400 resize-none"
+                className={`resize-none transition-all duration-300 ${isDarkMode ? 'bg-slate-700/50 border-purple-400/30 text-white placeholder-gray-400' : 'bg-white/80 border-purple-300/40 text-gray-900 placeholder-gray-500'}`}
               />
             </div>
 
             <Button
               onClick={handleGenerate}
               disabled={isGenerating || !apiKey || !conceptType || !seedIdea}
-              className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold py-3 text-lg transition-all duration-300 transform hover:scale-105"
+              className={`w-full font-semibold py-3 text-lg transition-all duration-300 transform hover:scale-105 ${isDarkMode ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white' : 'bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white'}`}
             >
               {isGenerating ? (
                 <div className="flex items-center gap-2">
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  {currentStep}
+                  <span className="animate-pulse">{currentStep}</span>
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
-                  <Sparkles className="w-5 h-5" />
+                  <Sparkles className="w-5 h-5 animate-pulse" />
                   Generate Concept!
-                  <Sparkles className="w-5 h-5" />
+                  <Sparkles className="w-5 h-5 animate-pulse delay-300" />
                 </div>
               )}
             </Button>
@@ -352,16 +391,16 @@ ${generatedConcept.loreSnippet}`;
 
         {/* Generated Content */}
         {generatedConcept && (
-          <Card className="bg-slate-800/50 border-purple-500/30 backdrop-blur-sm animate-in fade-in duration-1000">
+          <Card className={`transition-all duration-1000 animate-fade-in hover:scale-105 ${isDarkMode ? 'bg-slate-800/50 border-purple-500/30 backdrop-blur-sm' : 'bg-white/70 border-purple-200/50 backdrop-blur-sm'}`}>
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle className="text-yellow-400 text-2xl">Genesis Log Entry</CardTitle>
+                <CardTitle className={`text-2xl transition-colors duration-300 ${isDarkMode ? 'text-yellow-400' : 'text-purple-700'}`}>Genesis Log Entry</CardTitle>
                 <div className="flex gap-2">
                   <Button
                     onClick={downloadImage}
                     variant="outline"
                     size="sm"
-                    className="border-purple-400/30 text-purple-300 hover:bg-purple-600/20"
+                    className={`transition-all duration-300 hover:scale-110 ${isDarkMode ? 'border-purple-400/30 text-purple-300 hover:bg-purple-600/20' : 'border-purple-300/50 text-purple-700 hover:bg-purple-100'}`}
                   >
                     <Download className="w-4 h-4 mr-1" />
                     Image
@@ -370,7 +409,7 @@ ${generatedConcept.loreSnippet}`;
                     onClick={copyToClipboard}
                     variant="outline"
                     size="sm"
-                    className="border-purple-400/30 text-purple-300 hover:bg-purple-600/20"
+                    className={`transition-all duration-300 hover:scale-110 ${isDarkMode ? 'border-purple-400/30 text-purple-300 hover:bg-purple-600/20' : 'border-purple-300/50 text-purple-700 hover:bg-purple-100'}`}
                   >
                     <Copy className="w-4 h-4 mr-1" />
                     Text
@@ -380,39 +419,39 @@ ${generatedConcept.loreSnippet}`;
             </CardHeader>
             <CardContent className="space-y-8">
               {/* Image */}
-              <div className="flex justify-center">
+              <div className="flex justify-center animate-fade-in">
                 <div className="relative group">
                   <img
                     src={generatedConcept.imageData}
                     alt={generatedConcept.name}
-                    className="max-w-full h-auto rounded-lg shadow-2xl border border-purple-500/30 transition-transform duration-300 group-hover:scale-105"
+                    className={`max-w-full h-auto rounded-lg shadow-2xl transition-all duration-500 group-hover:scale-105 group-hover:shadow-3xl ${isDarkMode ? 'border border-purple-500/30' : 'border border-purple-200/50'}`}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-lg pointer-events-none"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-lg pointer-events-none transition-opacity duration-300 group-hover:opacity-50"></div>
                 </div>
               </div>
 
               {/* Name */}
-              <div className="text-center">
-                <h2 className="text-3xl font-bold text-yellow-400 mb-2">
+              <div className="text-center animate-fade-in">
+                <h2 className={`text-3xl font-bold mb-2 transition-colors duration-300 ${isDarkMode ? 'text-yellow-400' : 'text-purple-700'}`}>
                   {generatedConcept.name}
                 </h2>
-                <div className="h-px bg-gradient-to-r from-transparent via-purple-400 to-transparent"></div>
+                <div className={`h-px bg-gradient-to-r from-transparent to-transparent via-current transition-colors duration-300 ${isDarkMode ? 'text-purple-400' : 'text-purple-400'}`}></div>
               </div>
 
               {/* Description */}
-              <div className="bg-slate-700/30 rounded-lg p-6 border border-purple-500/20">
-                <h3 className="text-lg font-semibold text-purple-300 mb-3">Core Description</h3>
-                <p className="text-gray-200 leading-relaxed">{generatedConcept.description}</p>
+              <div className={`rounded-lg p-6 transition-all duration-500 hover:scale-105 ${isDarkMode ? 'bg-slate-700/30 border border-purple-500/20' : 'bg-purple-50/50 border border-purple-200/30'}`}>
+                <h3 className={`text-lg font-semibold mb-3 transition-colors duration-300 ${isDarkMode ? 'text-purple-300' : 'text-purple-700'}`}>Core Description</h3>
+                <p className={`leading-relaxed transition-colors duration-300 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>{generatedConcept.description}</p>
               </div>
 
               {/* Characteristics */}
               {generatedConcept.characteristics.length > 0 && (
-                <div className="bg-slate-700/30 rounded-lg p-6 border border-purple-500/20">
-                  <h3 className="text-lg font-semibold text-purple-300 mb-3">Key Characteristics</h3>
+                <div className={`rounded-lg p-6 transition-all duration-500 hover:scale-105 ${isDarkMode ? 'bg-slate-700/30 border border-purple-500/20' : 'bg-purple-50/50 border border-purple-200/30'}`}>
+                  <h3 className={`text-lg font-semibold mb-3 transition-colors duration-300 ${isDarkMode ? 'text-purple-300' : 'text-purple-700'}`}>Key Characteristics</h3>
                   <ul className="space-y-2">
                     {generatedConcept.characteristics.map((char, index) => (
-                      <li key={index} className="flex items-start gap-2 text-gray-200">
-                        <span className="text-yellow-400 mt-1">•</span>
+                      <li key={index} className={`flex items-start gap-2 transition-colors duration-300 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+                        <span className={`mt-1 transition-colors duration-300 ${isDarkMode ? 'text-yellow-400' : 'text-purple-600'}`}>•</span>
                         <span>{char}</span>
                       </li>
                     ))}
@@ -421,9 +460,9 @@ ${generatedConcept.loreSnippet}`;
               )}
 
               {/* Lore Snippet */}
-              <div className="bg-slate-700/30 rounded-lg p-6 border border-purple-500/20">
-                <h3 className="text-lg font-semibold text-purple-300 mb-3">Discovery Log</h3>
-                <div className="text-gray-200 leading-relaxed italic border-l-4 border-yellow-400/50 pl-4">
+              <div className={`rounded-lg p-6 transition-all duration-500 hover:scale-105 ${isDarkMode ? 'bg-slate-700/30 border border-purple-500/20' : 'bg-purple-50/50 border border-purple-200/30'}`}>
+                <h3 className={`text-lg font-semibold mb-3 transition-colors duration-300 ${isDarkMode ? 'text-purple-300' : 'text-purple-700'}`}>Discovery Log</h3>
+                <div className={`leading-relaxed italic border-l-4 pl-4 transition-colors duration-300 ${isDarkMode ? 'text-gray-200 border-yellow-400/50' : 'text-gray-700 border-purple-400/50'}`}>
                   {generatedConcept.loreSnippet}
                 </div>
               </div>
